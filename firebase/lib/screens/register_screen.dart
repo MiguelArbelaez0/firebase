@@ -1,24 +1,27 @@
+import 'package:firebase/screens/login_screen.dart';
 import 'package:firebase/screens/widgets/button_widget.dart';
 import 'package:firebase/screens/widgets/image_widget.dart';
 import 'package:firebase/screens/widgets/textfield_widget.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
-import 'home_screen.dart';
-
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({
+    super.key,
+  });
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   final emailController = TextEditingController();
 
   final passwordController = TextEditingController();
 
-  void signUserIn() async {
+  final confirpasswordController = TextEditingController();
+
+  void signUserUp() async {
     showDialog(
       context: context,
       builder: (context) {
@@ -27,18 +30,21 @@ class _LoginScreenState extends State<LoginScreen> {
     );
 
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text,
-        password: passwordController.text,
-      );
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
-      );
-      Navigator.pop(context);
+      if (passwordController.text == confirpasswordController.text) {
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+            email: emailController.text, password: passwordController.text);
+        // User registration successful, navigate to the HomeScreen
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => LoginScreen()),
+        );
+      } else {
+        showErrorMessage("Password don't match!");
+        Navigator.pop(context); // Close the loading dialog
+      }
     } on FirebaseAuthException catch (e) {
-      Navigator.pop(context);
       showErrorMessage(e.code);
+      Navigator.pop(context); // Close the loading dialog
     }
   }
 
@@ -69,14 +75,13 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(height: 10),
                 const Icon(
                   Icons.lock,
-                  size: 90,
+                  size: 60,
                 ),
-                const SizedBox(height: 50),
+                const SizedBox(height: 10),
                 Text(
-                  'Welcome back you\'ve been missed!',
+                  'Let\'s create an acount',
                   style: TextStyle(
                     color: Colors.grey[700],
                     fontSize: 16,
@@ -95,24 +100,18 @@ class _LoginScreenState extends State<LoginScreen> {
                   obscureText: true,
                 ),
                 const SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        'Forgot Password?',
-                        style: TextStyle(color: Colors.grey[600]),
-                      ),
-                    ],
-                  ),
+                TextfieldWidget(
+                  controller: confirpasswordController,
+                  hintText: 'Confirm Password',
+                  obscureText: true,
                 ),
+                const SizedBox(height: 10),
                 const SizedBox(height: 25),
                 ButtonWidget(
                   onTap: () {
-                    signUserIn();
+                    signUserUp();
                   },
-                  text: 'Sign In',
+                  text: 'Sign Up',
                 ),
                 const SizedBox(height: 50),
                 Padding(
@@ -154,16 +153,16 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Not a member?',
+                      'Alredy have an Acount',
                       style: TextStyle(color: Colors.grey[700]),
                     ),
                     const SizedBox(width: 4),
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushNamed(context, "register");
+                        Navigator.pushNamed(context, "login");
                       },
                       child: const Text(
-                        'Register now',
+                        'Login now',
                         style: TextStyle(
                           color: Colors.blue,
                           fontWeight: FontWeight.bold,
