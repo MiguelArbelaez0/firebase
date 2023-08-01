@@ -5,6 +5,8 @@ import 'package:firebase/screens/widgets/textfield_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../services/auth_services.dart';
+
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({
     super.key,
@@ -19,7 +21,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   final passwordController = TextEditingController();
 
-  final confirpasswordController = TextEditingController();
+  final confimrpasswordController = TextEditingController();
+
+  final AuthService _authService = AuthService();
 
   void signUserUp() async {
     showDialog(
@@ -30,20 +34,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
 
     try {
-      if (passwordController.text == confirpasswordController.text) {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-            email: emailController.text, password: passwordController.text);
+      if (passwordController.text == confimrpasswordController.text) {
+        await _authService.signUpWithEmailAndPassword(
+          emailController.text,
+          passwordController.text,
+        );
         // User registration successful, navigate to the HomeScreen
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => LoginScreen()),
         );
       } else {
-        showErrorMessage("Password don't match!");
+        showErrorMessage("Passwords don't match!");
         Navigator.pop(context); // Close the loading dialog
       }
-    } on FirebaseAuthException catch (e) {
-      showErrorMessage(e.code);
+    } catch (e) {
+      showErrorMessage(e.toString());
       Navigator.pop(context); // Close the loading dialog
     }
   }
@@ -101,7 +107,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 const SizedBox(height: 10),
                 TextfieldWidget(
-                  controller: confirpasswordController,
+                  controller: confimrpasswordController,
                   hintText: 'Confirm Password',
                   obscureText: true,
                 ),

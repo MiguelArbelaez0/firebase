@@ -35,9 +35,8 @@ class _LoginScreenState extends State<LoginScreen> {
         context,
         MaterialPageRoute(builder: (context) => HomeScreen()),
       );
-      Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
-      Navigator.pop(context);
+      Navigator.pop(context); // Close the loading dialog
       showErrorMessage(e.code);
     }
   }
