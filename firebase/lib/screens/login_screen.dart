@@ -4,6 +4,7 @@ import 'package:firebase/screens/widgets/textfield_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../services/auth_services.dart';
 import 'home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -14,6 +15,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final AuthService _authService = AuthService();
+
   final emailController = TextEditingController();
 
   final passwordController = TextEditingController();
@@ -27,9 +30,9 @@ class _LoginScreenState extends State<LoginScreen> {
     );
 
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text,
-        password: passwordController.text,
+      await _authService.signInWithEmailAndPassword(
+        emailController.text,
+        passwordController.text,
       );
       Navigator.pushReplacement(
         context,

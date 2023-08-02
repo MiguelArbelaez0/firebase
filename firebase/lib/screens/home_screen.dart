@@ -24,9 +24,18 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       body: Center(
-        child: Text(
-          "LOGED IN AS: ${user.email!}",
-          style: const TextStyle(fontSize: 20),
+        child: Column(
+          children: [
+            Text(
+              "LOGED IN AS: ${user.email!}",
+              style: const TextStyle(fontSize: 20),
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, "notifi");
+                },
+                child: Text(""))
+          ],
         ),
       ),
     );

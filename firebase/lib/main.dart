@@ -1,17 +1,21 @@
 import 'package:firebase/screens/auth_screen.dart';
 import 'package:firebase/screens/home_screen.dart';
 import 'package:firebase/screens/login_screen.dart';
+import 'package:firebase/screens/notification_screen.dart';
 import 'package:firebase/screens/register_screen.dart';
+import 'package:firebase/services/push_notification_services.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'firebase_options.dart';
 
+final navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await PushNotification().initNotifications();
   runApp(const MyApp());
 }
 
@@ -41,6 +45,7 @@ class MyApp extends StatelessWidget {
         "home": (context) => HomeScreen(),
         "login": (context) => const LoginScreen(),
         "register": (context) => const RegisterScreen(),
+        "notifi": (context) => const NotificationScreen(),
       },
     );
   }
