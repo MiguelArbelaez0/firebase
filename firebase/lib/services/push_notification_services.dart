@@ -1,17 +1,17 @@
 import 'package:firebase/main.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-Future<void> handleBackgrounMessage(RemoteMessage message) async {
-  final title = message.notification?.title ?? 'No Title';
-  final body = message.notification?.body ?? 'No Body';
-  final data = message.data;
-  print("title: $title");
-  print("body: $body");
-  print("data: $data");
-}
-
 class PushNotification {
   final _firebaseMessaging = FirebaseMessaging.instance;
+
+  Future<void> handleBackgrounMessage(RemoteMessage message) async {
+    final title = message.notification?.title ?? 'No Title';
+    final body = message.notification?.body ?? 'No Body';
+    final data = message.data;
+    print("title: $title");
+    print("body: $body");
+    print("data: $data");
+  }
 
   void handleMessage(RemoteMessage? message) {
     if (message == null) return;
