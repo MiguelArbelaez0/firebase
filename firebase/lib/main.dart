@@ -1,7 +1,7 @@
 import 'package:firebase/screens/auth_screen.dart';
 import 'package:firebase/screens/home_screen.dart';
 import 'package:firebase/screens/login_screen.dart';
-import 'package:firebase/screens/notification_screen.dart';
+
 import 'package:firebase/screens/register_screen.dart';
 import 'package:firebase/services/push_notification_services.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +45,6 @@ class MyApp extends StatelessWidget {
         "home": (context) => HomeScreen(),
         "login": (context) => const LoginScreen(),
         "register": (context) => const RegisterScreen(),
-        "notifi": (context) => const NotificationScreen(),
       },
     );
   }
