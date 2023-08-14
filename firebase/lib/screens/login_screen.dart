@@ -3,6 +3,7 @@ import 'package:firebase/screens/widgets/image_widget.dart';
 import 'package:firebase/screens/widgets/textfield_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../services/auth_services.dart';
 import 'home_screen.dart';
@@ -59,6 +60,25 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       },
     );
+  }
+
+  Future<void> sigInWithGoogle() async {
+    //create an instance of firebase auth and google sign in
+    FirebaseAuth auth = FirebaseAuth.instance;
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+    // triger the auhtentication flow
+    final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+    //obtain the auth details form the request
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser!.authentication;
+    // create a new credenteials
+    final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
+
+    //sign in the user with the credentials
+
+    final UserCredential userCredential =
+        await auth.signInWithCredential(credential);
   }
 
   @override
@@ -146,8 +166,20 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 50),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    ImageWidget(imagePath: "assets/google.png"),
+                  children: [
+                    GestureDetector(
+                      onTap: () async {
+                        await sigInWithGoogle();
+                        if (mounted) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => HomeScreen()),
+                          );
+                        }
+                      },
+                      child: ImageWidget(imagePath: "assets/google.png"),
+                    ),
                     SizedBox(width: 25),
                   ],
                 ),
