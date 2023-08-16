@@ -62,25 +62,6 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Future<void> sigInWithGoogle() async {
-    //create an instance of firebase auth and google sign in
-    FirebaseAuth auth = FirebaseAuth.instance;
-    final GoogleSignIn googleSignIn = GoogleSignIn();
-    // triger the auhtentication flow
-    final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
-    //obtain the auth details form the request
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser!.authentication;
-    // create a new credenteials
-    final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
-
-    //sign in the user with the credentials
-
-    final UserCredential userCredential =
-        await auth.signInWithCredential(credential);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -169,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     GestureDetector(
                       onTap: () async {
-                        await sigInWithGoogle();
+                        await _authService.sigInWithGoogle();
                         if (mounted) {
                           Navigator.push(
                             context,

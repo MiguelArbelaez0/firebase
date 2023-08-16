@@ -31,7 +31,6 @@ class HomeScreen extends StatelessWidget {
           IconButton(
             onPressed: () async {
               await signOut();
-
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -46,8 +45,16 @@ class HomeScreen extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
+            CircleAvatar(
+              radius: 60,
+              backgroundImage: NetworkImage(user.photoURL ?? ""),
+            ),
             Text(
-              "LOGED IN AS: ${user.email!}",
+              " ${user.displayName!}",
+              style: const TextStyle(fontSize: 20),
+            ),
+            Text(
+              " ${user.email!}",
               style: const TextStyle(fontSize: 20),
             ),
           ],
